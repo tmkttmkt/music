@@ -1,5 +1,4 @@
-
-from sinse import *
+from main.sinse import *
 #C→G→Am→Em→F→C→F→G
 k=kyok(44100,file_name="kyokudesu")
 

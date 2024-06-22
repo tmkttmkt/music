@@ -1,8 +1,7 @@
-from sinse import *
+from main import *
 import markovify
 import re
 import glob
-
 def extract_pitch_from_file(content):
     # 正規表現パターン
     pattern = re.compile(r'(\d*[A-Ga-g]#?\d*)')

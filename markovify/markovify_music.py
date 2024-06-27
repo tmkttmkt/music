@@ -1,4 +1,4 @@
-from main import *
+from ..Sinse import *
 import markovify
 import re
 import glob

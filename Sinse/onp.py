@@ -1,10 +1,13 @@
 import numpy as np
-
 from scipy import signal
 from random import randint
-
-
 from player import Player
+
+"""
+Onpクラスがこのままでいいのか
+1.メソットをただの関数に分離
+2.基本と派生に分類
+"""
 
 class Onp:
     def harmonic(self,func,f,v):

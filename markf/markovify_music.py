@@ -1,4 +1,9 @@
-from ..Sinse import *
+import sys
+file_path = __file__
+txt=file_path[:file_path.rfind('\\')]
+tx=file_path[:txt.rfind('\\')]
+sys.path.append(tx)
+from Sinse import *
 import markovify
 import re
 import glob
@@ -14,19 +19,17 @@ def pl(melody_pitches,bpm):
     print(melody_pitches)
     list=[]
     for melody in melody_pitches:
-        print(melody[0])
         o=k.create_onp((4/int(melody[0]))*(60/bpm))
-        o.sin(f(melody[1:]),1)
+        o.wave_function=Sin(f(melody[1:]),1)
         list.append(o)
     k.play(list)
-
 #onファイルに入ってるtxtのパスを全部取得
-file_paths = glob.glob('on/na.txt')
-print(file_paths)
+motf='onp'
+file_paths = os.listdir(motf)
 txt=[]
 #パスを全部開いて内容をリストにしてマルコフモデルに突っ込む
 for pas in file_paths:
-    with open(pas,"r",encoding="utf-8") as file:
+    with open(motf+"\\"+pas,"r",encoding="utf-8") as file:
         txt_e=file.read()
         txt.append(txt_e)
 text_model = markovify.Text(txt)

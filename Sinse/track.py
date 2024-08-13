@@ -10,7 +10,7 @@ class Track:
         self.rate=rate
         self.wave=np.zeros(int(rate * second))
         if len(args)>0:
-            if args[0] is Onp:
+            if type(args[0]) == Onp:
                 wave=[]
                 for on in args:
                     wave.append(on.wave)

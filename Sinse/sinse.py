@@ -4,7 +4,7 @@ import subprocess
 
 from A import A1_FREQ,FREQUENCY,f,nf
 from player import Player
-from onp import Onp
+from onp import *
 from track import Track
 class kyok:
     def __init__(self,rate=44100,second=1,file_name=None) -> None:

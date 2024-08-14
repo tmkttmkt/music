@@ -5,13 +5,6 @@ import soundfile as sf
 
 
 y, sr = librosa.load('wav\\gou.wav')
-print(y)
-print(len(y))
-print('Sampling rate (Hz): %d' % sr)
-print('Audio length (seconds): %.2f' % (len(y) / sr))
-
-
-
 D = np.abs(librosa.stft(y))
 print(D.shape)
 

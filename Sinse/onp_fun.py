@@ -3,7 +3,6 @@ from scipy import signal
 from random import randint
 from player import Player
 
-
 class Wave:
     def __init__(self,f,v,rate=44100) -> None:
         self.f=f
@@ -14,19 +13,30 @@ class Wave:
     def paht(self,array):
         return np.cumsum(2.0 * np.pi * self.f / self.rate * np.ones(len(array)))
     def maxabs(self,array):
-        return (array/np.max(np.abs(array)))*self.v
-        
+        if np.max(np.abs(array))>0:
+            return (array/np.max(np.abs(array)))*self.v
+        else:
+            return array
+    def __str__(self) -> str:
+        return str(round(self.f,4))+"Hzの"+self.__class__.__name__
+
+class Constwave(Wave):
+    def __init__(self,array,v) -> None:
+        self.array=array
+        self.v=v
+    def cal(self,array):
+        return self.maxabs(self.array)
+
 class Reverse(Wave):
     def __init__(self,wave:Wave) -> None:
         self.wave=wave
     def cal(self, array):
         return self.wave.cal(array)*-1
 class Wavelist(Wave):
-    def __init__(self,f,v,rate=44100,siki="*") -> None:
-        self.f=f
+    def __init__(self,list,v,rate=44100,siki="*") -> None:
         self.v=v
         self.rate=rate
-        self.list:list[Wave]=[]
+        self.list:list[Wave]=list
         self.siki=siki
     def cal(self,array):
         retarray=array.copy()
@@ -36,6 +46,8 @@ class Wavelist(Wave):
         for waveobj in self.list:
             retarray=func(retarray,waveobj.cal(array))
         return self.maxabs(retarray)
+    def __str__(self) -> str:
+        return str(len(self.list))+"個の"+self.__class__.__name__
 class Sin(Wave):
     def cal(self,array):
         return np.sin(self.paht(array))*self.v
@@ -51,20 +63,7 @@ class San(Wave):
 class Noise(Wave):
     def cal(self,array):
         return np.random.rand(self.paht(array))*self.v
-class Ifft(Wave):
-    def __init__(self,f,v,rate=44100) -> None:
-        self.f=f
-        self.v=v
-        self.rate=rate
-        self.lis=[0]
-    def cal(self,array):
-        n=0
-        for fd in self.lis:
-            array[int(n)]=fd
-            if n!=0:array[len(array)-int(n)]=fd
-            n+=1
-        wave=np.fft.ifft(array).real
-        return (wave/np.max(np.abs(wave)))*self.v
+
 class Random(Wave):
     def __init__(self,mf,v,rate=44100) -> None:
         self.mf=mf
@@ -90,6 +89,8 @@ class Random(Wave):
         wave/=R
         wave*=self.v
         return wave
+    def __str__(self) -> str:
+        return "これはRandomクラスです"
 
 
 

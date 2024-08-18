@@ -38,19 +38,8 @@ class kyok:
         file_name+=".wav"
         wavfile.write(file_name,self.rate, wave)
         self.output_file_name=file_name
-    def play_waves(self,args):
-        wargs=np.zeros(int(self.rate * self.second))
-        for sine in args:
-            if len(wargs)>len(sine.wave):
-                rwave=np.pad(sine.wave, (0, len(wargs)-len(sine.wave)), 'constant')
-            elif len(wargs)<len(sine.wave):
-                wargs=np.pad(wargs, (0, len(sine.wave)-len(wargs)), 'constant')
-                rwave=sine.wave
-            else:
-                rwave=sine.wave
-            wargs=wargs+rwave
-        self.p.open_stream()
-        self.p.play_wave(wargs)
+
+                
     def write(self,args,file_name=""):
         wargs=[]
         for on in args:
@@ -65,15 +54,61 @@ class kyok:
         file_name+=".wav"
         wavfile.write(file_name,self.rate, wave)
         self.output_file_name=file_name
+
+    def play_waves(self,args):
+        wargs=np.zeros(int(self.rate * self.second))
+        for sine in args:
+            if len(wargs)>len(sine.wave):
+                rwave=np.pad(sine.wave, (0, len(wargs)-len(sine.wave)), 'constant')
+            elif len(wargs)<len(sine.wave):
+                wargs=np.pad(wargs, (0, len(sine.wave)-len(wargs)), 'constant')
+                rwave=sine.wave
+            else:
+                rwave=sine.wave
+            wargs=wargs+rwave
+
+        self.p.open_stream()
+        self.p.play_wave(wargs)
     def play(self,args):
         wargs=[]
         for on in args:
             wargs.append(on.wave)
         wave=np.concatenate(wargs)
+
         self.p.open_stream()
         self.p.play_wave(wave)
+
+
     def run(self):
         if self.output_file_name:
             subprocess.run(self.output_file_name, shell=True)
         else:
             raise RuntimeError("まだ出力してねぇぞ")
+    def fft(self,args):
+        wargs=[]
+        for on in args:
+            wargs.append(on.wave)
+        wave=np.concatenate(wargs)
+        wave=pyfftw.interfaces.numpy_fft.fft(wave)
+        return (wave/np.max(np.abs(wave)))
+    def stft(self,args,element_stft=normal_stft):
+        if(args[0]==type(Onp)):
+            wargs=[]
+            for on in args:
+                wargs.append(on.wave)
+            wave=np.concatenate(wargs)
+        elif(args[0]==type(Track)):
+            wargs=np.zeros(int(self.rate * self.second))
+            for sine in args:
+                if len(wargs)>len(sine.wave):
+                    rwave=np.pad(sine.wave, (0, len(wargs)-len(sine.wave)), 'constant')
+                elif len(wargs)<len(sine.wave):
+                    wargs=np.pad(wargs, (0, len(sine.wave)-len(wargs)), 'constant')
+                    rwave=sine.wave
+                else:
+                    rwave=sine.wave
+                wargs=wargs+rwave
+        else:
+            ValueError("Onp型かTrack型しか受け付けません")
+        return librosa.stft(wave, n_fft=element_stft["n_fft"], hop_length=element_stft["hop_length"], win_length=element_stft["win_length"], window=element_stft["window"])
+

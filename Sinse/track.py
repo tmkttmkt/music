@@ -18,8 +18,7 @@ class Track:
             elif isinstance(args[0],np.ndarray):
                 wave=np.concatenate(args)
             else:
-                print("そんなものは入れれない")
-                exit()
+                ValueError("そんなものは入れれない")
             self.wave=np.concatenate([self.wave,wave])
     def append_start(self,second):
         wave=np.zeros(int(self.rate * second))
@@ -30,8 +29,7 @@ class Track:
         self.wave*=volume
     def __and__(self,other):
         if self.rate!=other.rate:
-            print("レートがあってません")
-            exit()
+            ValueError("レートがあってません")
         return Track(self.rate,0,[self.wave*other.wave])
     def __or__(self,other):
         if self.rate!=other.rate:
@@ -40,6 +38,6 @@ class Track:
         return Track(self.rate,0,[self.wave+other.wave])
     def __add__(self,other):
         if self.rate!=other.rate:
-            print("レートがあってません")
+            ValueError("レートがあってません")
             exit()
         return Track(self.rate,0,[np.concatenate([self.wave,other.wave])])

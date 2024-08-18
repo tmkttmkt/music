@@ -28,3 +28,9 @@ def nf(num):
 def f(str):
     str=str.upper()
     return FREQUENCY[str[:-1]]*2**(int(str[-1])-1)
+normal_stft={
+"n_fft" : 2048,           # フーリエ変換に使用するサンプルの数
+"hop_length" : 512,       # 隣接するフレーム間のサンプル数
+"win_length" : 2048,      # 各フレームに適用されるウィンドウのサイズ
+"window" : 'hann',        # ウィンドウ関数
+}

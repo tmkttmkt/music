@@ -54,5 +54,5 @@ plt.tight_layout()
 plt.show()
 
 # 再構築された音声信号を保存
-output_file = 'reconstructed_audio.wav'
+output_file = 'kyudesu_stft.wav'
 sf.write(output_file, y_reconstructed, sr)

@@ -111,4 +111,20 @@ class kyok:
         else:
             ValueError("Onp型かTrack型しか受け付けません")
         return librosa.stft(wave, n_fft=element_stft["n_fft"], hop_length=element_stft["hop_length"], win_length=element_stft["win_length"], window=element_stft["window"])
+    def Ifft(self,array,v=1.0):
+        second=len(array)/self.rate
+        cls=Onp(second)
 
+        # IFFTの計算
+        wave = pyfftw.interfaces.numpy_fft.ifft(array).real
+        cls.wave_function=Constwave(wave,v)
+        return cls
+    def Istft(self,array,v=1.0,element_stft=normal_stft):
+            second=len(array)/self.rate
+            cls=Onp(second)
+            
+            print(array.shape)
+            wave = librosa.stft(array, n_fft=element_stft["n_fft"], hop_length=element_stft["hop_length"], win_length=element_stft["win_length"], window=element_stft["window"]).real
+            print(wave.shape)
+            cls.wave_function=Constwave(wave,v)
+            return cls

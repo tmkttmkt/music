@@ -39,20 +39,3 @@ class Onp:
         return (wave/np.max(np.abs(wave)))
     def stft(self,element_stft=normal_stft):
         return librosa.stft(self.wave_function.cal(self.__wave), n_fft=element_stft["n_fft"], hop_length=element_stft["hop_length"], win_length=element_stft["win_length"], window=element_stft["window"])
-
-def Ifft(array,v=1.0,rate=44100):
-    second=len(array)/rate
-    cls=Onp(second)
-
-    # IFFTの計算
-    wave = pyfftw.interfaces.numpy_fft.ifft(array).real
-    cls.wave_function=Constwave(wave,v)
-    return cls
-def Stft(array,v=1.0,rate=44100,element_stft=normal_stft):
-        second=len(array)/rate
-        cls=Onp(second)
-        
-
-        wave = librosa.stft(array, n_fft=element_stft["n_fft"], hop_length=element_stft["hop_length"], win_length=element_stft["win_length"], window=element_stft["window"]).real
-        cls.wave_function=Constwave(wave,v)
-        return cls
